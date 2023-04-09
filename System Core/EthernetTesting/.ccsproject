@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVersion value="12.2.0"/>
+	<deviceVariant value="MSP432E401Y"/>
+	<deviceFamily value="MSP432"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="GNU_9.2.1:Linaro"/>
+	<isElfFormat value="true"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<rts value=""/>
+	<createSlaveProjects value=""/>
+	<ignoreDefaultDeviceSettings value="true"/>
+	<ignoreDefaultCCSSettings value="true"/>
+	<templateProperties value="id=ethernet-based_io_control_MSP_EXP432E401Y_nortos_gcc.projectspec.ethernet-based_io_control_MSP_EXP432E401Y_nortos_gcc,buildProfile=release,isHybrid=true"/>
+	<origin value="C:\ti\simplelink_msp432e4_sdk_4_20_00_12\examples\nortos\MSP_EXP432E401Y\lwip\ethernet-based_io_control\gcc\ethernet-based_io_control_MSP_EXP432E401Y_nortos_gcc.projectspec"/>
+	<filesToOpen value=""/>
+</projectOptions>
