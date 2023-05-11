@@ -272,7 +272,7 @@ class SecondPage(tk.Frame):
         self.lbl1 = tkinter.Label(self, font=('calibri', 20, 'bold'),text="HELLO USER",
                                  foreground='black', bg='#C5D6F6')
         self.lbl1.place(x=40, y=130)
-        #################### UPDATE ##########################
+  #################### UPDATE ##########################
         self.update_frame = customtkinter.CTkFrame(master=self, width=250, height=200,
                                                    bg_color='#f0f0f0')
         self.update_frame.place(x=350, y=150)
@@ -283,21 +283,39 @@ class SecondPage(tk.Frame):
             up.geometry('400x300')
             up.resizable(0, 0)
 
-            switch_var = customtkinter.StringVar()
-            switch_var2 = customtkinter.StringVar()
+            # Create command edit widget
+            command_edit = tk.Entry(up)
+            command_edit.place(x=20, y=20, width=260, height=30)
 
-            def switch_event():
-                print("switch toggled, current value:", switch_var.get())
+            def execute_command():
+                # Get the command from the user
+                command = command_edit.get()
 
-            def switch2_event():
-                print("switch toggled, current value:", switch_var2.get())
+                # Execute the command and capture the output
+                result = subprocess.run(f'cmd /c {command}', capture_output=True, text=True)
 
-            switch_1 = customtkinter.CTkSwitch(master=up, text="ON", command=switch_event,
-                                               variable=switch_var, onvalue="on", offvalue="off")
-            switch_1.place(x=150, y=50)
-            switch_2 = customtkinter.CTkSwitch(master=up, text="OFF", command=switch2_event,
-                                               variable=switch_var2, onvalue="on", offvalue="off")
-            switch_2.place(x=150, y=100)
+                # Display the output in the output_edit widget
+                output_edit.delete('1.0', tk.END)
+                output_edit.insert(tk.END, result.stdout)
+
+            # Create run button
+            btn = tk.Button(up, text='Run', command=execute_command)
+            btn.place(x=120, y=80)
+
+            # Create output edit widget
+            output_edit = tk.Text(up)
+            output_edit.place(x=20, y=120, width=260, height=60)
+
+            # Create background image label
+            bg_frame = Image.open('update.png')
+            photo1 = ImageTk.PhotoImage(bg_frame)
+            update_image_label = tk.Label(up, image=photo1)
+            update_image_label.image = photo1
+            update_image_label.place(x=75, y=50, height=80, width=80)
+
+
+
+
 
         self.update_button = customtkinter.CTkButton(self.update_frame, text='UPDATE',
                                                      font=('yu gothic ui', 20, 'bold'),
@@ -305,7 +323,7 @@ class SecondPage(tk.Frame):
                                                      , fg_color='white', command=update)
         self.update_button.place(x=75, y=150)
 
-        bg_frame = Image.open('Images\\update.png')
+        bg_frame = Image.open('update.png')
         photo1 = ImageTk.PhotoImage(bg_frame)
         update_image_label = tk.Label(self.update_frame, image=photo1)
         update_image_label.image = photo1
