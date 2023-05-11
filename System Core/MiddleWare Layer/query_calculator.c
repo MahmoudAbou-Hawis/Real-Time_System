@@ -1,4 +1,5 @@
-// make .h file for this function and put it in 
+#include"query_calculator.h"
+#include <stdio.h>
 double evaluate_expression(char* expr) {
     char* ptr = expr;
     double num_stack[100];
@@ -11,7 +12,7 @@ double evaluate_expression(char* expr) {
             num_top++;
             num_stack[num_top] = strtod(ptr, &ptr);
         }
-        else if (ptr == '+' || *ptr == '-' || *ptr == '*' || *ptr == '/') {
+        else if (*ptr == '+' || *ptr == '-' || *ptr == '*' || *ptr == '/') {
             while (op_top >= 0 && ((op_stack[op_top] == '*' || op_stack[op_top] == '/') || (op_stack[op_top] == '+' || op_stack[op_top] == '-') && (*ptr == '+' || *ptr == '-'))) {
                 double num2 = num_stack[num_top];
                 num_top--;
@@ -41,10 +42,7 @@ double evaluate_expression(char* expr) {
             op_stack[op_top] = *ptr;
             ptr++;
         }
-        else {
-            // Ignore whitespace
-            ptr++;
-        }
+        else {ptr++;}
     }
 
     while (op_top >= 0) {
@@ -74,4 +72,12 @@ double evaluate_expression(char* expr) {
     }
 
     return num_stack[num_top];
+}
+int main() {
+    char expr[100]; 
+    printf("Enter the expression: ");
+    fgets(expr, sizeof(expr), stdin); 
+    double result = evaluate_expression(expr);
+    printf("Result: %f\n", result);
+    return 0;
 }
