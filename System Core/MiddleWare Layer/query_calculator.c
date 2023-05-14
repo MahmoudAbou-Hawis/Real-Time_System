@@ -1,5 +1,22 @@
 #include"query_calculator.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+double evaluate_expression(char* expr);
+
+int main() {
+	while(1)
+	{
+    char expr[100]; 
+    printf("Enter the expression: ");
+    fgets(expr, sizeof(expr), stdin); 
+    double result = evaluate_expression(expr);
+    printf("Result: %0.3f\n", result);
+}
+    return 0;
+}
+
 double evaluate_expression(char* expr) {
     char* ptr = expr;
     double num_stack[100];
@@ -72,12 +89,4 @@ double evaluate_expression(char* expr) {
     }
 
     return num_stack[num_top];
-}
-int main() {
-    char expr[100]; 
-    printf("Enter the expression: ");
-    fgets(expr, sizeof(expr), stdin); 
-    double result = evaluate_expression(expr);
-    printf("Result: %f\n", result);
-    return 0;
 }
