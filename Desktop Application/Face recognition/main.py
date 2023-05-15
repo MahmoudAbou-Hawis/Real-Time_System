@@ -38,14 +38,17 @@ class FaceRecognition:
         print(self.known_face_names)
 
     def run_recognition(self):
-        url = "http://192.168.43.135:8080/video"
-        video_capture = cv2.VideoCapture(url)
+        cap = cv2.VideoCapture(0)
+
 
         if not video_capture.isOpened():
             sys.exit('Video source not found...')
 
         while True:
-            ret, frame = video_capture.read()
+            address = "http://192.168.43.1:8080/video"
+            cap.open(address)
+            # Capture a frame
+            ret, frame = cap.read()
 
             # Only process every other frame of video to save time
             if self.process_current_frame:
