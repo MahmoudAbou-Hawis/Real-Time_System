@@ -17,7 +17,7 @@
 #include "lwip/apps/fs.h"
 #include "third_party/lwip/src/apps/httpd/fsdata.h"
 #include "io.h"
-#include "RTE.h"
+#include "uartstdio.h"
 
 //*****************************************************************************
 //
@@ -48,49 +48,27 @@ fs_open(struct fs_file *psFile, const char *pcName)
 {
     const struct fsdata_file *psTree;
 
-
+    UARTprintf("%s\n",pcName);
     if ((psFile == NULL) || (pcName == NULL)) {
        return ERR_ARG;
     }
     //
     // Process request to toggle STATUS LED
     //
+
     if(ustrncmp(pcName, "/cgi-bin/toggle_led", 19) == 0)
     {
-        static char pcBuf[7];
-       int x =  ReadThread();
-       if(x == 1)
-       {
-           pcBuf[0]= 'T';
-           pcBuf[1]= 'h';
-           pcBuf[2]= 'r';
-           pcBuf[3]= 'e';
-           pcBuf[4]= 'a';
-           pcBuf[5]= 'd';
-           pcBuf[6]= ' ';
-           pcBuf[7]= '1';
+        static char pcBuf[4];
 
-       }
-       else if(x==2)
-       {
-           pcBuf[0]= 'T';
-           pcBuf[1]= 'h';
-           pcBuf[2]= 'r';
-           pcBuf[3]= 'e';
-           pcBuf[4]= 'a';
-           pcBuf[5]= 'd';
-           pcBuf[6]= ' ';
-           pcBuf[7]= '2';
-       }
         //
         // Toggle the STATUS LED
         //
-      //  io_set_led(!io_is_led_on());
+        io_set_led(!io_is_led_on());
 
         //
         // Get the new state of the LED
         //
-    //    io_get_ledstate(pcBuf, 4);
+        io_get_ledstate(pcBuf, 4);
 
         psFile->data = pcBuf;
         psFile->len = strlen(pcBuf);
@@ -103,14 +81,104 @@ fs_open(struct fs_file *psFile, const char *pcName)
         //return(psFile);
         return ERR_OK;
     }
+    else if(ustrncmp(pcName, "/calculate", 10) == 0)
+    {
+        pcName +=16;
+        int i = 0;
+        char arr[25];
+        for(i ; pcName[i] != 'A' ; i++)
+        {
+            arr[i] = pcName[i];
+        }
+        arr[i] = '\0';
+        UARTprintf("%s",arr);
+        static char pcBuf[2] = "hi";
+
+        //
+        // Get the state of the LED
+        //
+        io_get_ledstate(pcBuf, 2);
+
+        psFile->data = pcBuf;
+        psFile->len = strlen(pcBuf);
+        psFile->index = psFile->len;
+        psFile->pextension = NULL;
+        //return(psFile);
+        return ERR_OK;
+    }
 
     //
     // Request for LED State?
     //
+    else if(ustrncmp(pcName, "/ledstate", 9) == 0)
+    {
+        static char pcBuf[4];
 
+        //
+        // Get the state of the LED
+        //
+        io_get_ledstate(pcBuf, 4);
+
+        psFile->data = pcBuf;
+        psFile->len = strlen(pcBuf);
+        psFile->index = psFile->len;
+        psFile->pextension = NULL;
+        //return(psFile);
+        return ERR_OK;
+    }
+    //
+    // Request for the animation speed?
+    //
+    else if(ustrncmp(pcName, "/get_speed", 10) == 0)
+    {
+        static char pcBuf[6];
+
+        //
+        // Get the current animation speed as a string.
+        //
+        io_get_animation_speed_string(pcBuf, 6);
+
+        psFile->data = pcBuf;
+        psFile->len = strlen(pcBuf);
+        psFile->index = psFile->len;
+        psFile->pextension = NULL;
+        //return(psFile);
+        return ERR_OK;
+    }
+    else if(ustrncmp(pcName, "/sofar", 5) == 0)
+    {
+        static char pcBuf[11]= "Hello World";
+        psFile->data = pcBuf;
+        psFile->len = strlen(pcBuf);
+        psFile->index = psFile->len;
+        psFile->pextension = NULL;
+       // return(psFile);
+        return ERR_OK;
+    }
     //
     // Set the animation speed?
     //
+    else if(ustrncmp(pcName, "/cgi-bin/set_speed?percent=", 12) == 0)
+    {
+        static char pcBuf[6];
+
+        //
+        // Extract the parameter and set the actual speed requested.
+        //
+        io_set_animation_speed_string((char*)pcName + 27);
+
+        //
+        // Get the current speed setting as a string to send back.
+        //
+        io_get_animation_speed_string(pcBuf, 6);
+
+        psFile->data = pcBuf;
+        psFile->len = strlen(pcBuf);
+        psFile->index = psFile->len;
+        psFile->pextension = NULL;
+       // return(psFile);
+        return ERR_OK;
+    }
     //
     // If I can't find it there, look in the rest of the main psFile system
     //
