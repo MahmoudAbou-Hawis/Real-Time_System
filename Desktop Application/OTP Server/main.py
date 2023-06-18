@@ -4,8 +4,15 @@ import cv2
 import numpy as np
 import face_recognition
 import math
+import string
+import secrets
 import os, sys
 
+
+def generate_auth_token():
+    alphabet = string.ascii_letters + string.digits
+    token = ''.join(secrets.choice(alphabet) for i in range(128))
+    return token
 
 class FaceRecognition:
     face_locations = []
@@ -134,10 +141,11 @@ class myRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
         print(result)
-        if result != 'Unknown':
+        if result == 'Unknown':
             self.wfile.write(b'Unknown.')
         else:
-            self.wfile.write(result)
+            tokenKey = generate_auth_token()
+            self.wfile.write(str(result+' '+tokenKey).encode('utf-8'))
 
     def do_GET(self):
         client_ip = self.client_address[0]
