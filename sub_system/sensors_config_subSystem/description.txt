@@ -1,0 +1,7 @@
+1 => turn on (buzzer and fan)
+2 => turn off (buzzer and fan)
+3 => wait for string to show on the screen
+#############################################
+FOR FLAME SENSOR
+
+if fire detected it sends (40)
