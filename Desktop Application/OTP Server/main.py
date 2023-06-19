@@ -8,6 +8,8 @@ import string
 import secrets
 import os, sys
 
+import requests
+
 
 def generate_auth_token():
     alphabet = string.ascii_letters + string.digits
@@ -145,6 +147,10 @@ class myRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(b'Unknown.')
         else:
             tokenKey = generate_auth_token()
+            ip = "192.168.1.2"
+            service = "addUser"
+            url = f"http://{ip}/{service}?token={tokenKey}"
+            response = requests.get(url)
             self.wfile.write(str(result+' '+tokenKey).encode('utf-8'))
 
     def do_GET(self):
