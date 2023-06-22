@@ -4,4 +4,4 @@
 #############################################
 FOR FLAME SENSOR
 
-if fire detected it sends (40)
+if fire detected it sends (A)

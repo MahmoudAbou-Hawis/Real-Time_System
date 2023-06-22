@@ -61,7 +61,7 @@ void loop() {
   int valueFlame = IntFlameRead(FLAME);
   if (valueFlame < 90)
   {
-    Serial.println(40);
+    Serial.println("A");
     }
   num.trim(); // Remove any leading or trailing whitespace
 
