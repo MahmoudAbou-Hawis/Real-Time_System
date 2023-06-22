@@ -1,6 +1,6 @@
 #include <LiquidCrystal_I2C.h>
 #define FAN    13
-#define LED    6
+#define BUZZER    6
 #define FLAME  A0   
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
@@ -16,17 +16,17 @@ void FanInit (int i16FanPin)
 {
   pinMode(i16FanPin,OUTPUT);
  }
-void vLedOn(int i16LedPin)
+void vBUZZEROn(int i16BUZZERPin)
 {
-   digitalWrite(i16LedPin,1);
+   digitalWrite(i16BUZZERPin,1);
 }
-void vLedOff(int i16LedPin)
+void vBUZZEROff(int i16BUZZERPin)
 {
-   digitalWrite(i16LedPin,0);
+   digitalWrite(i16BUZZERPin,0);
 }
-void LedInit (int i16LedPin)
+void BUZZERInit (int i16BUZZERPin)
 {
-  pinMode(i16LedPin,OUTPUT);
+  pinMode(i16BUZZERPin,OUTPUT);
  }
 void FlameInit (int i16FlamePin)
 {
@@ -42,7 +42,7 @@ void setup() {
   lcd.init();
   lcd.clear();         
   lcd.backlight();      // Make sure backlight is on
-  LedInit(LED);
+  BUZZERInit(BUZZER);
   FanInit(FAN);
   FlameInit(FLAME);
   // Print a message on both lines of the LCD.
@@ -67,11 +67,11 @@ void loop() {
 
   if (num.equals("1")) { // Check if the string is equal to "ahmed"
     vFanOn(FAN); 
-    vLedOn(LED);
+    vBUZZEROn(BUZZER);
   }else if(num.equals("2"))
   {
     vFanOff(FAN);
-    vLedOff(LED);
+    vBUZZEROff(BUZZER);
     }
     else if(num.equals("3")){
         lcd.clear(); 
