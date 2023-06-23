@@ -37,7 +37,7 @@ int IntFlameRead (int i16FlamePin)
   return analogRead(i16FlamePin);
  }
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   lcd.init();
   lcd.clear();         
@@ -59,8 +59,11 @@ void loop() {
  // while(!Serial.available()); // Wait for the user to enter a string
   String num = Serial.readString(); // Read the string entered by the user
   int valueFlame = IntFlameRead(FLAME);
-  if (valueFlame < 90)
+      Serial.println(valueFlame);
+
+  if (valueFlame < 200)
   {
+    
     Serial.println("A");
     }
   num.trim(); // Remove any leading or trailing whitespace
