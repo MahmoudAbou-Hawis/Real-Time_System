@@ -59,12 +59,11 @@ void loop() {
  // while(!Serial.available()); // Wait for the user to enter a string
   String num = Serial.readString(); // Read the string entered by the user
   int valueFlame = IntFlameRead(FLAME);
-      Serial.println(valueFlame);
-
-  if (valueFlame < 200)
+  if (valueFlame < 300)
   {
     
     Serial.println("A");
+    delay(1);
     }
   num.trim(); // Remove any leading or trailing whitespace
 
@@ -81,8 +80,6 @@ void loop() {
         while(!Serial.available()); 
          num = Serial.readString();
          num.trim();
-          Serial.println("Screen: " + num); // Debug print to serial monitor
-
          lcd.setCursor(0,0); 
          lcd.print(num);
       }
