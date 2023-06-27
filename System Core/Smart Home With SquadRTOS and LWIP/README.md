@@ -1,7 +1,7 @@
-# Ethernet-based I/O Control
+# Smart Home based on SquadRTOS and Ethernet-based I/O Control
 
 This example application demonstrates web-based I/O control using the
-MSP432E4 Ethernet controller and the lwIP TCP/IP Stack.  DHCP is used to
+MSP432E4 Ethernet controller and the lwIP TCP/IP Stack and SquadRTOS OS.  DHCP is used to
 obtain an Ethernet address.  If DHCP times out without obtaining an
 address, a static IP address will be chosen using AutoIP.  The address that
 is selected will be shown on the UART allowing you to access the
@@ -57,22 +57,13 @@ enet_io directory:
 For additional details on lwIP, refer to the lwIP web page at:
 http://savannah.nongnu.org/projects/lwip/
 
+
+In addition to the web-based I/O control, this example application also utilizes the SquadRTOS operating system and implements three threads. One thread is responsible for controlling the LED in GPIO N, while another thread handles printing a name on the screen in the subsystem using I/O Demo 2. The third thread is used to detect if a fire is detected in the subsystem, and if so, take appropriate action to extinguish the fire.
+
+The use of threads in this application allows for concurrent execution of multiple tasks, thereby improving the overall performance and efficiency of the system. The LED control thread can run independently of the print name thread and fire detection thread, allowing for simultaneous LED control and subsystem monitoring.
+
+The use of SquadRTOS provides additional benefits such as task scheduling, memory management, and inter-thread communication, which simplifies the development process and improves the reliability of the system.
+
+Overall, the combination of web-based I/O control, the MSP432E4 Ethernet controller, lwIP TCP/IP Stack, and SquadRTOS operating system makes for a powerful and flexible smart home system that can be controlled and monitored remotely via a web browser.
 -------------------------------------------------------------------------------
-
-Copyright (c) 2013-2017 Texas Instruments Incorporated.  All rights reserved.
-Software License Agreement
-
-Texas Instruments (TI) is supplying this software for use solely and
-exclusively on TI's microcontroller products. The software is owned by
-TI and/or its suppliers, and is protected under applicable copyright
-laws. You may not combine this software with "viral" open-source
-software in order to form a larger program.
-
-THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-DAMAGES, FOR ANY REASON WHATSOEVER.
-
 
