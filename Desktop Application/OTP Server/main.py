@@ -142,16 +142,16 @@ class myRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/plain')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        print(result)
-        if result == 'Unknown':
-            self.wfile.write(b'Unknown.')
+        print(type(result))
+        if result == 'Unknown' or result == None:
+            self.wfile.write(b'Unknown')
         else:
             tokenKey = generate_auth_token()
             ip = "192.168.1.2"
             service = "addUser"
             url = f"http://{ip}/{service}?token={tokenKey}"
-            response = requests.get(url)
-            self.wfile.write(str(result+' '+tokenKey).encode('utf-8'))
+           # response = requests.get(url)
+            self.wfile.write(str(result).encode('utf-8'))
 
     def do_GET(self):
         client_ip = self.client_address[0]
