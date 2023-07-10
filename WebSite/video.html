@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Camera Example</title>
+  </head>
+  <style>
+    body{
+      background-color: #ECF8F9;
+      margin: 0px;
+    }
+
+    .container {
+      padding: 50px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+    }
+
+    #camera-stream {
+  max-width: 100%; 
+  height: auto; 
+}
+
+    .button{
+        text-align: center;
+    }
+
+    #start-camera {
+  background-color: #E55807; 
+  color: black; 
+  font-size: 18px; 
+  padding: 5px 15px; 
+  margin: 10px; 
+  width: 150px; 
+  height: 50px; 
+  border-radius: 12px;
+}
+
+    #stop-camera {
+  background-color: #E55807; 
+  color: black; 
+  font-size: 18px; 
+  padding: 5px ; 
+  margin: 10px; 
+  width: 150px;
+  height: 50px; 
+  border-radius: 12px;
+}
+
+    header {
+      background-color: #068DA9;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1{
+      margin: 0px;
+      text-align: center;
+    }
+  </style>
+  <body>
+    <header>
+    <h1>Face ID</h1>
+    </header>
+    <div class="container">
+     <video id="camera-stream"></video>
+    </div>
+    <div class="button">
+      <button id="start-camera">Start Camera</button>
+      <button id="stop-camera" disabled>Stop Camera</button>
+    </div>
+    <script>
+      const video = document.getElementById('camera-stream');
+      const startCameraBtn = document.getElementById('start-camera');
+      const stopCameraBtn = document.getElementById('stop-camera');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      let timerId = null;
+      
+      // Start the camera
+      function startCamera() {
+        // Check if the browser supports the getUserMedia API
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+              video.srcObject = stream;
+              video.play();
+              startCameraBtn.disabled = true;
+              stopCameraBtn.disabled = false;
+              timerId = setInterval(sendFrame, 1000); // send a frame every second
+            })
+            .catch(function(error) {
+              console.error('Error accessing media devices.', error);
+            });
+        } else {
+          console.error('Media devices are not supported.');
+        }
+      }
+      
+      // Stop the camera
+      function stopCamera() {
+        clearInterval(timerId);
+        const stream = video.srcObject;
+        if (stream) {
+          const tracks = stream.getTracks();
+          tracks.forEach(function(track) {
+            track.stop();
+          });
+          video.srcObject = null;
+          startCameraBtn.disabled = false;
+          stopCameraBtn.disabled = true;
+        }
+      }
+      
+      // Send a frame to the server
+      function sendFrame() {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(function(blob) {
+          fetch('http://192.168.1.5:8070', {
+            method: 'POST',
+            body: blob
+             })
+            .then(function(response) {
+              return response.text();
+             })
+            .then(function(text) {
+              if (text.trim() !== 'Unknown') {
+                window.location.href = "Home.htm";
+              }
+              console.log(text.trim());
+              console.log('Frame Sent.');
+            })
+            .catch(function(error) {
+              console.error('Error sending frame.', error);
+            });
+        }, 'image/jpeg');
+      }
+      
+      // Add event listeners to the buttons
+      startCameraBtn.addEventListener('click', startCamera);
+      stopCameraBtn.addEventListener('click', stopCamera);
+    </script>
+  </body>
+</html>
