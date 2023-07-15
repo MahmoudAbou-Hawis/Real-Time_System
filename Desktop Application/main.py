@@ -1,10 +1,13 @@
 ################### LIBRARIES #############################
+import subprocess
 import tkinter
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 import customtkinter
+import requests
+import random
 #import uart
 #from datetime import *
 from time import strftime,time,sleep
@@ -323,7 +326,7 @@ class SecondPage(tk.Frame):
                                                      , fg_color='white', command=update)
         self.update_button.place(x=75, y=150)
 
-        bg_frame = Image.open('update.png')
+        bg_frame = Image.open('Images\\update.png')
         photo1 = ImageTk.PhotoImage(bg_frame)
         update_image_label = tk.Label(self.update_frame, image=photo1)
         update_image_label.image = photo1
@@ -344,15 +347,18 @@ class SecondPage(tk.Frame):
             switch_var2 = customtkinter.StringVar()
 
             def switch_event():
-                print("switch toggled, current value:", switch_var.get())
+                ip = "192.168.1.2"
+                service = "cgi-bin/toggle_led?id=" + str(random.random())
+                url = f"http://{ip}/{service}"
+                response = requests.get(url)
+                print(response.content.decode('utf-8'))
 
-            def switch2_event():
-                print("switch toggled, current value:", switch_var2.get())
+
 
             switch_1 = customtkinter.CTkSwitch(master=li, text="ON", command=switch_event,
                                                variable=switch_var, onvalue="on", offvalue="off")
             switch_1.place(x=150, y=50)
-            switch_2 = customtkinter.CTkSwitch(master=li, text="OFF", command=switch2_event,
+            switch_2 = customtkinter.CTkSwitch(master=li, text="OFF", command=switch_event,
                                                variable=switch_var2, onvalue="on", offvalue="off")
             switch_2.place(x=150, y=100)
 
